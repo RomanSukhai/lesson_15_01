@@ -2,12 +2,10 @@
 It's my work,and I am author this code;
 You can checked him,and edit too
  */
-
 package homework_03;
-
-import homework_02.Student;
-
 import java.util.*;
+import java.util.function.*;
+import java.util.stream.Collectors;
 
 /**
  * The (@code String) class represent character strings.
@@ -15,7 +13,6 @@ import java.util.*;
  * @see  java.lang.Object#toString()
  * @since JDK 1.0
  */
-
 
 //Class,where work programm
 public class Main {
@@ -38,13 +35,18 @@ public class Main {
         TreeSet<Commodity> think = new TreeSet<>();
         Scanner sc =new  Scanner(System.in);
         main();
-        //Cycle program,where are method
+        //This method sort width in all data in TreeSet
+        Consumer<TreeSet<Commodity>> SortForWeight =x->x.stream().sorted((o1,o2)->o1.getWeight()-o2.getWeight()).collect(Collectors.toList()).forEach(c-> System.out.println(c));
+        //This method sort weight in all data in TreeSet
+        Consumer<TreeSet<Commodity>> SortForWidth =x->x.stream().sorted((o1,o2)->o1.getWidth()- o2.getWidth()).collect(Collectors.toList()).forEach(c-> System.out.println(c));
+        //This method sort height in all data in TreeSet
+        Consumer<TreeSet<Commodity>> SortForHeight =x->x.stream().sorted((o1, o2) -> o1.getHeight()-o2.getHeight()).collect(Collectors.toList()).forEach(c-> System.out.println(c));
+
         while (true){
             System.out.println();
             System.out.print("<--Введіть цифру: ");
             int number = sc.nextInt();
             switch (number){
-
                 case 1 :{
                     AddThink(think, sc);
                     main();
@@ -79,17 +81,17 @@ public class Main {
                     break;
                 }
                 case 5 :{
-                    SortForHeight(think);
+                    SortForHeight.accept(think);
                     main();
                     break;
                 }
                 case 6 :{
-                    SortForWidth(think);
+                    SortForWidth.accept(think);
                     main();
                     break;
                 }
                 case 7 :{
-                    SortForWeight(think);
+                    SortForWeight.accept(think);
                     main();
                     break;
                 }
@@ -107,52 +109,22 @@ public class Main {
             }
         }
     }
+
     //This method can print one Object,if you print your name
     private static void PrintOneObjectThatPrint(TreeSet<Commodity> think, String name) {
-        Iterator<Commodity> iterator = think.iterator();
-        while (iterator.hasNext()){
-            Commodity next = iterator.next();
-            if (next.getName().equalsIgnoreCase(name)){
-                System.out.println(next);
+        think.forEach(x-> {
+            if (x.getName().equalsIgnoreCase(name)) {
+                System.out.println(x);
             }
-        }
-
+        });
     }
     //This method set all data in Object,if you print your name
     private static void SetterValuesForObject(TreeSet<Commodity> think, Scanner sc, String name) {
-        Iterator<Commodity> iterator = think.iterator();
-        while (iterator.hasNext()){
-            Commodity next = iterator.next();
-            if (next.getName().equalsIgnoreCase(name)){
-                SetThink(sc, next,think);
-            }
-        }
-    }
-    //This method sort weight in all data in TreeSet
-    private static void SortForWeight(TreeSet<Commodity> think) {
-        List<Commodity> think2 = getListForThink(think);
-        Collections.sort(think2, new Comparator<Commodity>() {
-            @Override
-            public int compare(Commodity o1,Commodity o2 ) {
-                return o1.getWeight()> o2.getWeight()?1:-1;
+        think.forEach(x-> {
+            if (x.getName().equalsIgnoreCase(name)) {
+                SetThink(sc,x,think);
             }
         });
-        for (Commodity f : think2){
-            System.out.println(f);
-        }
-    }
-    //This method sort width in all data in TreeSet
-    private static void SortForWidth(TreeSet<Commodity> think) {
-        List<Commodity> think2 = getListForThink(think);
-        Collections.sort(think2, new Comparator<Commodity>() {
-            @Override
-            public int compare(Commodity o1,Commodity o2 ) {
-                return o1.getWidth()> o2.getWidth()?1:-1;
-            }
-        });
-        for (Commodity f : think2){
-            System.out.println(f);
-        }
     }
 
     //Method created for creating List with Object(Commodity)
@@ -165,30 +137,9 @@ public class Main {
     //Method in order to print all Object from TreeSet
     private static void IteratorPrintAll(TreeSet<Commodity> think) {
         System.out.println();
-        Iterator<Commodity> iterator = think.iterator();
-        while (iterator.hasNext()) {
-            Commodity next = iterator.next();
-            System.out.println(next);
-        }
+        think.forEach(x-> System.out.println(x));
         System.out.println();
-
     }
-
-
-    //This method sort height in all data in TreeSet
-    private static void SortForHeight(TreeSet<Commodity> think) {
-        List<Commodity> think2 = getListForThink(think);
-        Collections.sort(think2, new Comparator<Commodity>() {
-            @Override
-            public int compare(Commodity o1,Commodity o2 ) {
-                return o1.getHeight()> o2.getHeight()?1:-1;
-            }
-        });
-        for (Commodity f : think2){
-            System.out.println(f);
-        }
-    }
-
 
     //This method sort name in all data in TreeSet
     private static void SortForName(TreeSet<Commodity> think) {
@@ -199,9 +150,7 @@ public class Main {
                 return o1.getName().compareTo(o2.getName());
             }
         });
-        for (Commodity f : think2){
-            System.out.println(f);
-        }
+        think2.forEach(x-> System.out.println(x));
     }
 
     //This method in order to substitute values in Object
@@ -223,25 +172,27 @@ public class Main {
         next.setWidth(width);
         System.out.println("___________________");
         System.out.println(next);
-        System.out.println("___________________");
-        System.out.println();
-        System.out.println();
+        System.out.println("___________________\n\n");
+
     }
 
     //This method in order to created object in TheeSet
+
     private static void AddThink(TreeSet<Commodity> think, Scanner sc) {
-        System.out.println("____________________");
-        System.out.print("Введіть ім'я товару: ");
-        String name = sc.next();
-        System.out.print("Введіть ширину товару: ");
-        int width = sc.nextInt();
-        System.out.print("Введіть дожину товару: ");
-        int height = sc.nextInt();
-        System.out.print("Введіть вагу товару: ");
-        int weight = sc.nextInt();
-        System.out.println("----------------------");
-        System.out.println();
-        think.add(new Commodity(name,height,width,weight));
+        Supplier<Commodity> thinkNew=()->{
+            System.out.println("____________________");
+            System.out.print("Введіть ім'я товару: ");
+            String name = sc.next();
+            System.out.print("Введіть ширину товару: ");
+            int width = sc.nextInt();
+            System.out.print("Введіть дожину товару: ");
+            int height = sc.nextInt();
+            System.out.print("Введіть вагу товару: ");
+            int weight = sc.nextInt();
+            return new Commodity(name,height,width,weight);
+        };
+        think.add(thinkNew.get());
         IteratorPrintAll(think);
     }
 }
+

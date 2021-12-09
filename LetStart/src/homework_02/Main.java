@@ -14,11 +14,7 @@ public class Main {
         str.add(new Person("John",12));
         str.add(new Person("Rostuslav",10));
         str.add(new Person("Ura",89));
-
-        for (Person d : str){
-            System.out.println(d);
-        }
-
+        str.forEach(x-> System.out.println(x));
     }
 
 }
